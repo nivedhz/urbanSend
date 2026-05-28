@@ -58,7 +58,7 @@ fn handle_connection(mut stream: TcpStream) -> Result<()> {
 fn recieve_data() -> Result<()> {
     let port = 8080;
 
-    let listener = TcpListener::bind(format!("127.0.0.1:{}", port))?;
+    let listener = TcpListener::bind(format!("0.0.0.0:{}", port))?;
 
     println!("Server listening on {}", port);
 
