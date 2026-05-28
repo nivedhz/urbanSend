@@ -28,9 +28,7 @@ fn handle_connection(mut stream: TcpStream) -> Result<()> {
 
                 println!("Receiving file: {} ({} bytes)", filename, file_size);
 
-                let save_path = format!("~/storage/downloads/{}", filename);
-
-                let file = File::create(save_path)?;
+                let file = File::create(filename.to_string())?;
                 let mut writer = BufWriter::new(file);
                 let mut remaining = file_size;
                 let mut buffer = [0; 1048576];
