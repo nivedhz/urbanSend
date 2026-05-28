@@ -10,7 +10,7 @@ fn handle_connection(mut stream: TcpStream) -> Result<()> {
         let bytes_read = stream.read(&mut buffer)?;
 
         if bytes_read == 0 {
-            println!("Client disconnected");
+            println!("{} disconnected", stream.peer_addr()?);
             break;
         }
 
@@ -18,7 +18,8 @@ fn handle_connection(mut stream: TcpStream) -> Result<()> {
             .trim()
             .to_string();
 
-        println!("Received Data: {:?}", message);
+        println!("{}: {:?}", stream.peer_addr()?, message);
+        println!();
     }
 
     Ok(())
