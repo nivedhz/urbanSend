@@ -50,7 +50,7 @@ fn send_file(addr: &str, stream: &mut TcpStream) -> Result<()> {
 
 fn send_data() -> std::io::Result<()> {
     let port = 8080;
-    let mut stream = TcpStream::connect(format!("127.0.0.1:{}", port))?;
+    let mut stream = TcpStream::connect("[2409:40f3:d:5555:e021:f3ff:febc:dd83]:8080")?;
 
     println!("Connected to server");
 
