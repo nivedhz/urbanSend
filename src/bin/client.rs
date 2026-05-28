@@ -14,11 +14,12 @@ fn send_data() -> std::io::Result<()> {
         let mut message = String::new();
 
         io::stdin().read_line(&mut message)?;
+        println!();
 
         let trimmed_message = message.trim();
 
         if trimmed_message == "exit" {
-            println!("Disconnecting...");
+            println!("Disconnecting from server...");
             break;
         }
 
