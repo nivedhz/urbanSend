@@ -29,7 +29,7 @@ fn handle_connection(mut stream: TcpStream) -> Result<()> {
                 println!("Receiving file: {} ({} bytes)", filename, file_size);
 
                 let folder_path = "/data/data/com.termux/files/home/storage/downloads/urbanSend/";
-                fs::create_dir(folder_path)?;
+                fs::create_dir_all(folder_path)?;
                 let save_path = format!("{}{}", folder_path, filename);
 
                 let file = File::create(save_path)?;
