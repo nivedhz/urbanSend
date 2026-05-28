@@ -1,4 +1,4 @@
-use std::fs::File;
+use std::fs::{self, File};
 use std::io::{BufWriter, Read, Result, Write};
 use std::net::{TcpListener, TcpStream};
 
@@ -28,10 +28,9 @@ fn handle_connection(mut stream: TcpStream) -> Result<()> {
 
                 println!("Receiving file: {} ({} bytes)", filename, file_size);
 
-                let save_path = format!(
-                    "/data/data/com.termux/files/home/storage/downloads/urbanSend/{}",
-                    filename
-                );
+                let folder_path = "/data/data/com.termux/files/home/storage/downloads/urbanSend/";
+                fs::create_dir(folder_path)?;
+                let save_path = format!("{}{}", folder_path, filename);
 
                 let file = File::create(save_path)?;
                 let mut writer = BufWriter::new(file);
