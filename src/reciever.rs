@@ -1,5 +1,6 @@
+use anyhow::Result;
 use std::fs::{self, File};
-use std::io::{BufWriter, Read, Result, Write};
+use std::io::{BufWriter, Read, Write};
 use std::net::{TcpListener, TcpStream};
 
 fn handle_connection(mut stream: TcpStream) -> Result<()> {
@@ -28,7 +29,8 @@ fn handle_connection(mut stream: TcpStream) -> Result<()> {
 
                 println!("Receiving file: {} ({} bytes)", filename, file_size);
 
-                let folder_path = "/data/data/com.termux/files/home/storage/downloads/urbanSend/";
+                // let folder_path = "/data/data/com.termux/files/home/storage/downloads/urbanSend/";
+                let folder_path = "/home/nivedh/Downloads/urbanSend/";
                 fs::create_dir_all(folder_path)?;
                 let save_path = format!("{}{}", folder_path, filename);
 
@@ -59,13 +61,11 @@ fn handle_connection(mut stream: TcpStream) -> Result<()> {
     Ok(())
 }
 
-fn recieve_data() -> Result<()> {
+pub fn recieve_data() -> Result<()> {
     let port = 8080;
-
     let listener = TcpListener::bind(format!("[::]:{}", port))?;
 
     println!("Server listening on {}", port);
-
     for stream in listener.incoming() {
         match stream {
             Ok(stream) => {
@@ -79,8 +79,4 @@ fn recieve_data() -> Result<()> {
     }
 
     Ok(())
-}
-
-fn main() -> Result<()> {
-    recieve_data()
 }
