@@ -15,17 +15,12 @@ fn send_file(
     let file_size = file.metadata()?.len();
     let file_name = path.file_name().unwrap().to_str().unwrap();
 
-    // packet type
     stream.write_all(b"FILE")?;
-    // filename length
     let file_name_len = file_name.len() as u64;
     stream.write_all(&file_name_len.to_be_bytes())?;
-    // filename
     stream.write_all(file_name.as_bytes())?;
-    // file size
     stream.write_all(&file_size.to_be_bytes())?;
 
-    // file data
     let mut buffer = [0; 1048576];
 
     loop {
@@ -60,14 +55,9 @@ pub fn send_data(file_path: String) -> Result<()> {
         println!("{}", device);
     }
 
-    // Extract the IP of the first discovered device
     let target_ip = devices[0].ip();
-
-    // Connect dynamically to the discovered IP
     let mut stream = TcpStream::connect(format!("{}:8080", target_ip))?;
-
     println!("Connected to server at {}", target_ip);
-
     send_file(stream.peer_addr(), &mut stream, file_path)?;
 
     Ok(())

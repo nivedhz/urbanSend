@@ -1,8 +1,25 @@
 use anyhow::Result;
+use std::env;
 use std::fs::{self, File};
 use std::io::{BufWriter, Read, Write};
 use std::net::{TcpListener, TcpStream, UdpSocket};
+use std::path::PathBuf;
 use std::thread;
+
+fn get_save_dir() -> PathBuf {
+    if let Ok(prefix) = env::var("PREFIX") {
+        if prefix.contains("com.termux") {
+            return PathBuf::from("/data/data/com.termux/files/home/storage/downloads/urbanSend");
+        }
+    }
+
+    if let Some(mut path) = dirs::download_dir() {
+        path.push("urbanSend");
+        return path;
+    }
+
+    PathBuf::from("./urbanSend_downloads")
+}
 
 fn handle_connection(mut stream: TcpStream) -> Result<()> {
     println!("Connection established from {:?}", stream.peer_addr()?);
@@ -30,12 +47,11 @@ fn handle_connection(mut stream: TcpStream) -> Result<()> {
 
                 println!("Receiving file: {} ({} bytes)", filename, file_size);
 
-                // Adjust this path based on whether you are testing on Termux or your laptop
-                let folder_path = "/data/data/com.termux/files/home/storage/downloads/urbanSend/";
-                fs::create_dir_all(folder_path)?;
-                let save_path = format!("{}{}", folder_path, filename);
+                let folder_path = get_save_dir();
+                fs::create_dir_all(&folder_path)?;
+                let save_path = folder_path.join(filename.to_string());
 
-                let file = File::create(save_path)?;
+                let file = File::create(&save_path)?;
                 let mut writer = BufWriter::new(file);
                 let mut remaining = file_size;
                 let mut buffer = [0; 1048576];
@@ -51,7 +67,8 @@ fn handle_connection(mut stream: TcpStream) -> Result<()> {
                 }
 
                 writer.flush()?;
-                println!("Received file: {}", filename);
+
+                println!("Received file: {} -> Saved to: {:?}", filename, save_path);
             }
             other => {
                 println!("Packet type: {:?}", String::from_utf8_lossy(other));
@@ -75,7 +92,6 @@ pub fn receive_data() -> Result<()> {
             if &buffer[..size] == b"DISCOVER_URBANSEND" {
                 println!("Sending response back directly to {}", sender_addr);
 
-                // Send direct unicast reply
                 match socket.send_to(b"URBANSEND_HERE", sender_addr) {
                     Ok(bytes) => println!("Sent {} bytes", bytes),
                     Err(e) => println!("Failed to send response: {}", e),
@@ -85,7 +101,6 @@ pub fn receive_data() -> Result<()> {
     });
 
     let port = 8080;
-    // Bind to 0.0.0.0 instead of [::] to prevent Android IPv6 exclusivity issues
     let listener = TcpListener::bind(format!("0.0.0.0:{}", port))?;
 
     println!("Server listening on {}", port);

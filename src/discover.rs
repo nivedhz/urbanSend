@@ -4,7 +4,6 @@ use std::net::{SocketAddr, UdpSocket};
 use std::time::Duration;
 
 pub fn discover_devices() -> Result<Vec<SocketAddr>> {
-    // Bind to port 0 to let the OS pick a random ephemeral port
     let socket = UdpSocket::bind("0.0.0.0:0")?;
 
     println!("Bound to {:?}", socket.local_addr()?);
@@ -12,10 +11,8 @@ pub fn discover_devices() -> Result<Vec<SocketAddr>> {
     socket.set_broadcast(true)?;
     println!("Waiting for responses...");
 
-    // Set a 2-second timeout for discovery
     socket.set_read_timeout(Some(Duration::from_secs(2)))?;
 
-    // Send to the global broadcast address instead of a hardcoded IP
     socket.send_to(b"DISCOVER_URBANSEND", "255.255.255.255:9999")?;
 
     let mut devices = Vec::new();
@@ -28,7 +25,6 @@ pub fn discover_devices() -> Result<Vec<SocketAddr>> {
                 devices.push(addr);
             }
             Err(e) => {
-                // Gracefully exit the loop when the 2-second timeout hits
                 if e.kind() == ErrorKind::WouldBlock || e.kind() == ErrorKind::TimedOut {
                     break;
                 } else {
