@@ -49,7 +49,7 @@ cargo run send /path/to/file
 Example:
 
 ```bash
-cargo run send /home/nivedh/Videos/game.mkv
+cargo run send /home/user/Videos/game.mkv
 ```
 
 The sender will:
