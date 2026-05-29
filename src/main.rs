@@ -1,3 +1,4 @@
+mod discover;
 mod receive;
 mod sender;
 use anyhow::Result;
