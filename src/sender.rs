@@ -1,3 +1,4 @@
+use crate::discover;
 use anyhow::Result;
 use std::fs::File;
 use std::io::{Read, Write};
@@ -46,12 +47,25 @@ fn send_file(
 }
 
 pub fn send_data(file_path: String) -> Result<()> {
-    // let port = 8080;
-    let mut stream = TcpStream::connect("[2409:40f3:d:5555:e021:f3ff:febc:dd83]:8080")?;
-    // let mut stream = TcpStream::connect(format!("[::1]:{}", port))?;
+    let devices = discover::discover_devices()?;
+
+    if devices.is_empty() {
+        println!("No devices found");
+        return Ok(());
+    }
+
+    println!("Found devices:");
+    for device in &devices {
+        println!("{}", device);
+    }
+
+    let target_ip = devices[0].ip();
+
+    let mut stream = TcpStream::connect(format!("{}:8080", target_ip))?;
 
     println!("Connected to server");
 
     send_file(stream.peer_addr(), &mut stream, file_path)?;
+
     Ok(())
 }

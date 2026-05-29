@@ -1,7 +1,8 @@
 use anyhow::Result;
 use std::fs::{self, File};
 use std::io::{BufWriter, Read, Write};
-use std::net::{TcpListener, TcpStream};
+use std::net::{TcpListener, TcpStream, UdpSocket};
+use std::thread;
 
 fn handle_connection(mut stream: TcpStream) -> Result<()> {
     println!("Connection established from {:?}", stream.peer_addr()?);
@@ -62,6 +63,22 @@ fn handle_connection(mut stream: TcpStream) -> Result<()> {
 }
 
 pub fn receive_data() -> Result<()> {
+    thread::spawn(|| {
+        let socket = UdpSocket::bind("0.0.0.0:9999").unwrap();
+
+        let mut buffer = [0; 1024];
+
+        loop {
+            let (size, sender_addr) = socket.recv_from(&mut buffer).unwrap();
+
+            if &buffer[..size] == b"DISCOVER_URBANSEND" {
+                socket.send_to(b"URBANSEND_HERE", sender_addr).unwrap();
+
+                println!("Discovery request from {}", sender_addr);
+            }
+        }
+    });
+
     let port = 8080;
     let listener = TcpListener::bind(format!("[::]:{}", port))?;
 
