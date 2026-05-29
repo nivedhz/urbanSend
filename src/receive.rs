@@ -65,6 +65,7 @@ fn handle_connection(mut stream: TcpStream) -> Result<()> {
 pub fn receive_data() -> Result<()> {
     thread::spawn(|| {
         let socket = UdpSocket::bind("0.0.0.0:9999").unwrap();
+        println!("Discovery service listening on 9999");
 
         let mut buffer = [0; 1024];
 
@@ -82,7 +83,7 @@ pub fn receive_data() -> Result<()> {
         }
     });
 
-    let port = 9999;
+    let port = 8080;
     let listener = TcpListener::bind(format!("[::]:{}", port))?;
 
     println!("Server listening on {}", port);
