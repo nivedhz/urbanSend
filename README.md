@@ -49,7 +49,7 @@ cargo run send /path/to/file
 Example:
 
 ```bash
-cargo run send /home/user/Videos/game.mkv
+cargo run send /home/user/Videos/video.mkv
 ```
 
 The sender will:
@@ -65,8 +65,8 @@ Receiver:
 ```code
 Server listening on 8080
 Connection established from [::1]:56074
-Receiving file: game.mkv (1112000827 bytes)
-Received file: game.mkv
+Receiving file: video.mkv (1112000827 bytes)
+Received file: video.mkv
 [::1]:56074 disconnected
 ```
 
@@ -74,7 +74,7 @@ Sender:
 
 ```code
 Connected to server
-Sent "game.mkv" of 1112000827 bytes to [::1]:8080
+Sent "video.mkv" of 1112000827 bytes to [::1]:8080
 ```
 
 ## Roadmap
