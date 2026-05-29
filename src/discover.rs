@@ -8,8 +8,8 @@ pub fn discover_devices() -> Result<Vec<SocketAddr>> {
     socket.set_broadcast(true)?;
     socket.set_read_timeout(Some(Duration::from_secs(2)))?;
 
-    socket.send_to(b"DISCOVER_URBANSEND", "255.255.255.255:9999")?;
-    socket.send_to(b"DISCOVER_URBANSEND", "127.0.0.1:9999")?;
+    let _ = socket.send_to(b"DISCOVER_URBANSEND", "255.255.255.255:9999")?;
+    let _ = socket.send_to(b"DISCOVER_URBANSEND", "127.0.0.1:9999")?;
 
     let mut devices = Vec::new();
     let mut buffer = [0; 1024];
