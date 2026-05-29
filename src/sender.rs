@@ -59,11 +59,13 @@ pub fn send_data(file_path: String) -> Result<()> {
         println!("{}", device);
     }
 
-    // let target_ip = devices[0].ip();
+    // CHANGE: Extract the IP of the first discovered device
+    let target_ip = devices[0].ip();
 
-    let mut stream = TcpStream::connect(format!("172.20.10.1:8080"))?;
+    // CHANGE: Use the discovered IP dynamically
+    let mut stream = TcpStream::connect(format!("{}:8080", target_ip))?;
 
-    println!("Connected to server");
+    println!("Connected to server at {}", target_ip);
 
     send_file(stream.peer_addr(), &mut stream, file_path)?;
 
