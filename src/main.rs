@@ -14,7 +14,7 @@ fn main() -> Result<()> {
                 sender::send_data(file_path)?
             }
             "recieve" => reciever::recieve_data()?,
-            _ => eprint!("Invalid Operation\n"),
+            _ => eprintln!("Invalid Operation\n"),
         }
     }
 
