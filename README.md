@@ -24,7 +24,6 @@ The project can:
 3. Transfer a file.
 4. Save the received file on the destination machine.
 
-At the moment, devices must know each other's IP addresses manually.
 
 ## Usage
 
@@ -81,7 +80,6 @@ Sent "video.mkv" of 1112000827 bytes to [::1]:8080
 
 ### Networking
 
-* [ ] Automatic device discovery
 * [ ] Multiple device support
 * [ ] Transfer progress reporting
 * [ ] Transfer speed metrics
