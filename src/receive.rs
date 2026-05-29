@@ -82,7 +82,7 @@ pub fn receive_data() -> Result<()> {
         }
     });
 
-    let port = 8080;
+    let port = 9999;
     let listener = TcpListener::bind(format!("[::]:{}", port))?;
 
     println!("Server listening on {}", port);
