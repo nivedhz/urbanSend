@@ -4,8 +4,7 @@ use std::net::{SocketAddr, UdpSocket};
 use std::time::Duration; // Import ErrorKind to check for timeouts
 
 pub fn discover_devices() -> Result<Vec<SocketAddr>> {
-    // let socket = UdpSocket::bind("0.0.0.0:9998")?;
-    let socket = UdpSocket::bind("0.0.0.0:0")?;
+    let socket = UdpSocket::bind("0.0.0.0:9998")?;
 
     println!("Bound to {:?}", socket.local_addr()?);
 
