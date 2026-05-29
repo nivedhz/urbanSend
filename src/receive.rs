@@ -31,7 +31,7 @@ fn handle_connection(mut stream: TcpStream) -> Result<()> {
                 println!("Receiving file: {} ({} bytes)", filename, file_size);
 
                 // Adjust this path based on whether you are testing on Termux or your laptop
-                let folder_path = "/data/data/com.termux/files/home/downloads/urbanSend/";
+                let folder_path = "/data/data/com.termux/files/home/storage/downloads/urbanSend/";
                 fs::create_dir_all(folder_path)?;
                 let save_path = format!("{}{}", folder_path, filename);
 
@@ -103,4 +103,3 @@ pub fn receive_data() -> Result<()> {
 
     Ok(())
 }
-

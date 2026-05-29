@@ -41,4 +41,3 @@ pub fn discover_devices() -> Result<Vec<SocketAddr>> {
 
     Ok(devices)
 }
-
