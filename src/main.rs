@@ -1,4 +1,4 @@
-mod reciever;
+mod receive;
 mod sender;
 use anyhow::Result;
 use std::env::args;
@@ -13,7 +13,7 @@ fn main() -> Result<()> {
                 let file_path = String::from(&input_args[2]);
                 sender::send_data(file_path)?
             }
-            "recieve" => reciever::recieve_data()?,
+            "receive" => receive::receive_data()?,
             _ => eprintln!("Invalid Operation\n"),
         }
     }
