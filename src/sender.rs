@@ -59,9 +59,9 @@ pub fn send_data(file_path: String) -> Result<()> {
         println!("{}", device);
     }
 
-    let target_ip = devices[0].ip();
+    // let target_ip = devices[0].ip();
 
-    let mut stream = TcpStream::connect(format!("{}:8080", target_ip))?;
+    let mut stream = TcpStream::connect(format!("172.20.10.1:8080"))?;
 
     println!("Connected to server");
 

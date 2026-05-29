@@ -11,7 +11,7 @@ pub fn discover_devices() -> Result<Vec<SocketAddr>> {
     println!("Waiting for responses...");
     socket.set_read_timeout(Some(Duration::from_secs(2)))?;
 
-    socket.send_to(b"DISCOVER_URBANSEND", "255.255.255.255:9999")?;
+    socket.send_to(b"DISCOVER_URBANSEND", "172.20.10.1:9999")?;
 
     let mut devices = Vec::new();
     let mut buffer = [0; 1024];
