@@ -72,9 +72,12 @@ pub fn receive_data() -> Result<()> {
             let (size, sender_addr) = socket.recv_from(&mut buffer).unwrap();
 
             if &buffer[..size] == b"DISCOVER_URBANSEND" {
-                socket.send_to(b"URBANSEND_HERE", sender_addr).unwrap();
+                println!("Sending response to {}", sender_addr);
 
-                println!("Discovery request from {}", sender_addr);
+                match socket.send_to(b"URBANSEND_HERE", sender_addr) {
+                    Ok(bytes) => println!("Sent {} bytes", bytes),
+                    Err(e) => println!("Failed to send response: {}", e),
+                }
             }
         }
     });

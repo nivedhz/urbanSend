@@ -16,10 +16,15 @@ pub fn discover_devices() -> Result<Vec<SocketAddr>> {
 
     loop {
         match socket.recv_from(&mut buffer) {
-            Ok((_, addr)) => {
+            Ok((size, addr)) => {
+                println!("Received {} bytes from {}", size, addr);
+
                 devices.push(addr);
             }
-            Err(_) => break,
+            Err(e) => {
+                println!("recv_from error: {}", e);
+                break;
+            }
         }
     }
 
