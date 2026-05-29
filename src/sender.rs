@@ -24,6 +24,7 @@ fn send_file(
     stream.write_all(file_name.as_bytes())?;
     // file size
     stream.write_all(&file_size.to_be_bytes())?;
+
     // file data
     let mut buffer = [0; 1048576];
 
@@ -50,7 +51,7 @@ pub fn send_data(file_path: String) -> Result<()> {
     let devices = discover::discover_devices()?;
 
     if devices.is_empty() {
-        println!("No devices found");
+        println!("No devices found on the network.");
         return Ok(());
     }
 
@@ -59,10 +60,10 @@ pub fn send_data(file_path: String) -> Result<()> {
         println!("{}", device);
     }
 
-    // CHANGE: Extract the IP of the first discovered device
+    // Extract the IP of the first discovered device
     let target_ip = devices[0].ip();
 
-    // CHANGE: Use the discovered IP dynamically
+    // Connect dynamically to the discovered IP
     let mut stream = TcpStream::connect(format!("{}:8080", target_ip))?;
 
     println!("Connected to server at {}", target_ip);

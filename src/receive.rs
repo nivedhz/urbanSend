@@ -30,8 +30,8 @@ fn handle_connection(mut stream: TcpStream) -> Result<()> {
 
                 println!("Receiving file: {} ({} bytes)", filename, file_size);
 
-                // let folder_path = "/data/data/com.termux/files/home/storage/downloads/urbanSend/";
-                let folder_path = "/home/nivedh/Downloads/urbanSend/";
+                // Adjust this path based on whether you are testing on Termux or your laptop
+                let folder_path = "/data/data/com.termux/files/home/downloads/urbanSend/";
                 fs::create_dir_all(folder_path)?;
                 let save_path = format!("{}{}", folder_path, filename);
 
@@ -65,10 +65,6 @@ fn handle_connection(mut stream: TcpStream) -> Result<()> {
 pub fn receive_data() -> Result<()> {
     thread::spawn(|| {
         let socket = UdpSocket::bind("0.0.0.0:9999").unwrap();
-
-        // ADD THIS: You must enable broadcast on the receiver socket too
-        socket.set_broadcast(true).unwrap();
-
         println!("Discovery service listening on 9999");
 
         let mut buffer = [0; 1024];
@@ -77,14 +73,11 @@ pub fn receive_data() -> Result<()> {
             let (size, sender_addr) = socket.recv_from(&mut buffer).unwrap();
 
             if &buffer[..size] == b"DISCOVER_URBANSEND" {
-                println!("Sending response to {}", sender_addr);
+                println!("Sending response back directly to {}", sender_addr);
 
-                // CHANGE THIS: Broadcast the reply back to the sender's exact port
-                // This bypasses iOS Hotspot client isolation and Docker subnet conflicts
-                let reply_addr = format!("255.255.255.255:{}", sender_addr.port());
-
-                match socket.send_to(b"URBANSEND_HERE", reply_addr) {
-                    Ok(bytes) => println!("Sent {} bytes via broadcast", bytes),
+                // Send direct unicast reply
+                match socket.send_to(b"URBANSEND_HERE", sender_addr) {
+                    Ok(bytes) => println!("Sent {} bytes", bytes),
                     Err(e) => println!("Failed to send response: {}", e),
                 }
             }
@@ -92,13 +85,15 @@ pub fn receive_data() -> Result<()> {
     });
 
     let port = 8080;
-    let listener = TcpListener::bind(format!("0.0.0.0:{}", port))?; // Changed from [::] to 0.0.0.0 for better compatibility
+    // Bind to 0.0.0.0 instead of [::] to prevent Android IPv6 exclusivity issues
+    let listener = TcpListener::bind(format!("0.0.0.0:{}", port))?;
 
     println!("Server listening on {}", port);
     for stream in listener.incoming() {
         match stream {
             Ok(stream) => {
-                handle_connection(stream).unwrap_or_else(|e| eprintln!("Error: {}", e));
+                handle_connection(stream)
+                    .unwrap_or_else(|e| eprintln!("Error handling connection: {}", e));
             }
             Err(e) => {
                 eprintln!("Connection failed: {:?}", e);
@@ -108,3 +103,4 @@ pub fn receive_data() -> Result<()> {
 
     Ok(())
 }
+
