@@ -4,6 +4,14 @@ A lightweight file transfer application written in Rust.
 
 urbanSend is an experimental project focused on understanding how modern peer-to-peer file sharing applications work under the hood. The long-term goal is to create a fast, cross-platform file transfer tool inspired by solutions like LocalSend, while learning networking, systems programming, and Rust along the way.
 
+> ## 🚧 Heavy Development Notice
+>
+> urbanSend is heavily under development.
+>
+> Features, networking behavior, and internal architecture may change at any time. Expect bugs, breaking changes, unfinished functionality, and protocol modifications as the project evolves.
+>
+> The primary goal right now is learning, experimentation, and building the foundations of a future cross-platform file transfer application.
+
 ## Current Features
 
 - Send files over TCP
@@ -15,16 +23,12 @@ urbanSend is an experimental project focused on understanding how modern peer-to
 
 ## Current Status
 
-urbanSend is currently in the early development stage.
-
 The project can:
 
 1. Start a receiver that listens for incoming connections.
 2. Connect a sender to the receiver.
 3. Transfer a file.
 4. Save the received file on the destination machine.
-
-At the moment, devices must know each other's IP addresses manually.
 
 ## Usage
 
@@ -64,17 +68,25 @@ Receiver:
 
 ```code
 Server listening on 8080
-Connection established from [::1]:56074
-Receiving file: video.mkv (1112000827 bytes)
-Received file: video.mkv
-[::1]:56074 disconnected
+Discovery service listening on 9999
+Sending response back directly to 198.51.100.50
+Sent 14 bytes
+Connection established from 198.51.100.50
+Receiving file: video.mkv (1249771520 bytes)
+Received file: video.mkv -> Saved to: "/home/user/Downloads/urbanSend/video.mkv"
+198.51.100.50disconnected
 ```
 
 Sender:
 
 ```code
-Connected to server
-Sent "video.mkv" of 1112000827 bytes to [::1]:8080
+Bound to 0.0.0.0:57354
+Waiting for responses...
+Received 14 bytes from 198.51.100.50
+Found devices:
+198.51.100.50
+Connected to server at 198.51.100.50
+Sent "movie.mkv" of 1249771520 bytes to 198.51.100.50:8080
 ```
 
 ## Roadmap
@@ -86,6 +98,11 @@ Sent "video.mkv" of 1112000827 bytes to [::1]:8080
 - [ ] Transfer progress reporting
 - [ ] Transfer speed metrics
 - [ ] Resume interrupted transfers
+
+* [ ] Multiple device support
+* [ ] Transfer progress reporting
+* [ ] Transfer speed metrics
+* [ ] Resume interrupted transfers
 
 ### Reliability
 
