@@ -23,8 +23,6 @@ urbanSend is an experimental project focused on understanding how modern peer-to
 
 ## Current Status
 
-urbanSend is currently in the early development stage.
-
 The project can:
 
 1. Start a receiver that listens for incoming connections.
