@@ -4,6 +4,14 @@ A lightweight file transfer application written in Rust.
 
 urbanSend is an experimental project focused on understanding how modern peer-to-peer file sharing applications work under the hood. The long-term goal is to create a fast, cross-platform file transfer tool inspired by solutions like LocalSend, while learning networking, systems programming, and Rust along the way.
 
+> ## 🚧 Heavy Development Notice
+>
+> urbanSend is heavily under development.
+>
+> Features, networking behavior, and internal architecture may change at any time. Expect bugs, breaking changes, unfinished functionality, and protocol modifications as the project evolves.
+>
+> The primary goal right now is learning, experimentation, and building the foundations of a future cross-platform file transfer application.
+
 ## Current Features
 
 * Send files over TCP
