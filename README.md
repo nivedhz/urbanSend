@@ -14,12 +14,12 @@ urbanSend is an experimental project focused on understanding how modern peer-to
 
 ## Current Features
 
-* Send files over TCP
-* Receive files over TCP
-* Supports large files (tested with files over 1 GB)
-* IPv6 support
-* No external servers
-* Pure Rust implementation
+- Send files over TCP
+- Receive files over TCP
+- Supports large files (tested with files over 1 GB)
+- IPv6 support
+- No external servers
+- Pure Rust implementation
 
 ## Current Status
 
@@ -29,7 +29,6 @@ The project can:
 2. Connect a sender to the receiver.
 3. Transfer a file.
 4. Save the received file on the destination machine.
-
 
 ## Usage
 
@@ -94,6 +93,12 @@ Sent "movie.mkv" of 1249771520 bytes to 198.51.100.50:8080
 
 ### Networking
 
+- [ ] Automatic device discovery
+- [ ] Multiple device support
+- [ ] Transfer progress reporting
+- [ ] Transfer speed metrics
+- [ ] Resume interrupted transfers
+
 * [ ] Multiple device support
 * [ ] Transfer progress reporting
 * [ ] Transfer speed metrics
@@ -101,21 +106,21 @@ Sent "movie.mkv" of 1249771520 bytes to 198.51.100.50:8080
 
 ### Reliability
 
-* [ ] File integrity verification
-* [ ] Better error handling
-* [ ] Transfer confirmations
+- [ ] File integrity verification
+- [ ] Better error handling
+- [ ] Transfer confirmations
 
 ### Security
 
-* [ ] Device authentication
-* [ ] End-to-end encryption
+- [ ] Device authentication
+- [ ] End-to-end encryption
 
 ### Platform Support
 
-* [ ] Desktop application
-* [ ] Android application
-* [ ] iOS application
-* [ ] Cross-platform GUI
+- [ ] Desktop application
+- [ ] Android application
+- [ ] iOS application
+- [ ] Cross-platform GUI
 
 ## Why?
 
@@ -123,12 +128,12 @@ This project exists primarily as a learning journey.
 
 Rather than treating networking as a black box, urbanSend is being built from the ground up to explore:
 
-* TCP/IP networking
-* File transfer protocols
-* Service discovery
-* Concurrency
-* Systems programming
-* Rust
+- TCP/IP networking
+- File transfer protocols
+- Service discovery
+- Concurrency
+- Systems programming
+- Rust
 
 Every feature is implemented incrementally with the goal of understanding the underlying technology rather than simply using it.
 
