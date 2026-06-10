@@ -1,23 +1,19 @@
+mod args;
 mod discover;
 mod receive;
 mod sender;
+use crate::args::EntityType;
 use anyhow::Result;
-use std::env::args;
+use args::Arguments;
+use clap::Parser;
 
 fn main() -> Result<()> {
-    let input_args: Vec<String> = args().collect();
-    if input_args.len() > 1 {
-        let operation = &input_args[1];
+    let input_args = Arguments::parse();
 
-        match operation.trim() {
-            "send" => {
-                let file_path = String::from(&input_args[2]);
-                sender::send_data(file_path)?
-            }
-            "receive" => receive::receive_data()?,
-            _ => eprintln!("Invalid Operation\n"),
-        }
-    }
+    match &input_args.entity_type {
+        EntityType::Send { file_path } => sender::send_data(String::from(file_path))?,
+        EntityType::Receive => receive::receive_data()?,
+    };
 
     Ok(())
 }
