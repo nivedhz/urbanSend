@@ -22,12 +22,12 @@ fn get_save_dir() -> PathBuf {
 }
 
 fn handle_connection(mut stream: TcpStream) -> Result<()> {
-    println!("Connection established from {:?}", stream.peer_addr()?);
+    println!("[*] Connection established from {:?}", stream.peer_addr()?);
 
     loop {
         let mut packet_type = [0; 4];
         if stream.read_exact(&mut packet_type).is_err() {
-            println!("{} disconnected", stream.peer_addr()?);
+            println!("[!] {} disconnected", stream.peer_addr()?);
             break;
         }
 
@@ -45,7 +45,7 @@ fn handle_connection(mut stream: TcpStream) -> Result<()> {
                 stream.read_exact(&mut file_size_buf)?;
                 let file_size = u64::from_be_bytes(file_size_buf);
 
-                println!("Receiving file: {} ({} bytes)", filename, file_size);
+                println!("[*] Receiving file: {} ({} bytes)", filename, file_size);
 
                 let folder_path = get_save_dir();
                 fs::create_dir_all(&folder_path)?;
@@ -68,10 +68,13 @@ fn handle_connection(mut stream: TcpStream) -> Result<()> {
 
                 writer.flush()?;
 
-                println!("Received file: {} -> Saved to: {:?}", filename, save_path);
+                println!(
+                    "[*] Received file: {} -> Saved to: {:?}",
+                    filename, save_path
+                );
             }
             other => {
-                println!("Packet type: {:?}", String::from_utf8_lossy(other));
+                println!("[!] Packet type: {:?}", String::from_utf8_lossy(other));
             }
         }
     }
@@ -82,7 +85,7 @@ fn handle_connection(mut stream: TcpStream) -> Result<()> {
 pub fn receive_data() -> Result<()> {
     thread::spawn(|| {
         let socket = UdpSocket::bind("0.0.0.0:9999").unwrap();
-        println!("Discovery service listening on 9999");
+        println!("[*] Discovery service listening on 9999");
 
         let mut buffer = [0; 1024];
 
@@ -90,11 +93,11 @@ pub fn receive_data() -> Result<()> {
             let (size, sender_addr) = socket.recv_from(&mut buffer).unwrap();
 
             if &buffer[..size] == b"DISCOVER_URBANSEND" {
-                println!("Sending response back directly to {}", sender_addr);
+                println!("[*] Sending response back directly to {}", sender_addr);
 
                 match socket.send_to(b"URBANSEND_HERE", sender_addr) {
-                    Ok(bytes) => println!("Sent {} bytes", bytes),
-                    Err(e) => println!("Failed to send response: {}", e),
+                    Ok(bytes) => println!("[*] Sent {} bytes", bytes),
+                    Err(e) => println!("[!] Failed to send response: {}", e),
                 }
             }
         }
@@ -103,15 +106,15 @@ pub fn receive_data() -> Result<()> {
     let port = 8080;
     let listener = TcpListener::bind(format!("0.0.0.0:{}", port))?;
 
-    println!("Server listening on {}", port);
+    println!("[*] Server listening on {}", port);
     for stream in listener.incoming() {
         match stream {
             Ok(stream) => {
                 handle_connection(stream)
-                    .unwrap_or_else(|e| eprintln!("Error handling connection: {}", e));
+                    .unwrap_or_else(|e| eprintln!("[!] Error handling connection: {}", e));
             }
             Err(e) => {
-                eprintln!("Connection failed: {:?}", e);
+                eprintln!("[!] Connection failed: {:?}", e);
             }
         }
     }

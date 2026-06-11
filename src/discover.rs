@@ -6,10 +6,10 @@ use std::time::Duration;
 pub fn discover_devices() -> Result<Vec<SocketAddr>> {
     let socket = UdpSocket::bind("0.0.0.0:0")?;
 
-    println!("Bound to {:?}", socket.local_addr()?);
+    println!("[*] Bound to {:?}", socket.local_addr()?);
 
     socket.set_broadcast(true)?;
-    println!("Waiting for responses...");
+    println!("[*] Waiting for responses...");
 
     socket.set_read_timeout(Some(Duration::from_secs(2)))?;
 
@@ -21,14 +21,14 @@ pub fn discover_devices() -> Result<Vec<SocketAddr>> {
     loop {
         match socket.recv_from(&mut buffer) {
             Ok((size, addr)) => {
-                println!("Received {} bytes from {}", size, addr);
+                println!("[*] Received {} bytes from {}", size, addr);
                 devices.push(addr);
             }
             Err(e) => {
                 if e.kind() == ErrorKind::WouldBlock || e.kind() == ErrorKind::TimedOut {
                     break;
                 } else {
-                    println!("recv_from error: {}", e);
+                    println!("[!] recv_from error: {}", e);
                     break;
                 }
             }
