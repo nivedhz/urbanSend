@@ -1,5 +1,6 @@
 use crate::discover;
 use anyhow::Result;
+use indicatif::{ProgressBar, ProgressStyle};
 use std::fs::File;
 use std::io::{self, Read, Write};
 use std::net::{IpAddr, SocketAddr, TcpStream};
@@ -23,18 +24,22 @@ fn send_file(
     stream.write_all(&file_size.to_be_bytes())?;
 
     let mut buffer = [0; 1048576];
+    let progress_bar = ProgressBar::new(file_size);
+    progress_bar.set_style(ProgressStyle::default_bar().template("{spinner:.green} [{elapsed_precise}] [{bar:40.yellow/orange}] {bytes}/{total_bytes} ({eta})").unwrap().progress_chars("|>-"));
 
     loop {
         let bytes_read = file.read(&mut buffer)?;
+        progress_bar.inc(u64::try_from(bytes_read).unwrap());
 
         if bytes_read == 0 {
+            progress_bar.finish();
             break;
         }
         stream.write_all(&buffer[..bytes_read])?;
     }
 
     println!(
-        "Sent {:?} of {} bytes to {:?}",
+        "[*] Sent {:?} of {} bytes to {:?}",
         file_name,
         file_size,
         addr.unwrap()
@@ -44,7 +49,6 @@ fn send_file(
 }
 
 pub fn send_data(file_path: String) -> Result<()> {
-    // Attempt automated UDP discovery
     let devices = discover::discover_devices()?;
     let target_ip: IpAddr;
 
@@ -52,10 +56,9 @@ pub fn send_data(file_path: String) -> Result<()> {
         println!("\n[!] No devices found automatically via UDP Broadcast.");
         println!("[*] Android or network topology may be blocking discovery traffic.");
 
-        // LOOP until the user provides a syntactically valid IP address
         loop {
-            print!("Please enter the Receiver's IP address manually: ");
-            io::stdout().flush()?; // Force the print statement out of console buffers
+            print!("[*] Please enter the Receiver's IP address manually: ");
+            io::stdout().flush()?;
 
             let mut input = String::new();
             io::stdin().read_line(&mut input)?;
@@ -67,22 +70,28 @@ pub fn send_data(file_path: String) -> Result<()> {
                     break;
                 }
                 Err(_) => {
-                    println!("Invalid IP format. Please try again (e.g., 192.168.43.50).");
+                    println!("[!] Invalid IP format. Please try again (e.g., 192.168.43.50).");
                 }
             }
         }
     } else {
-        println!("Found devices automatically:");
+        println!("[*] Found devices automatically:");
+        let mut device_count = 0;
         for device in &devices {
-            println!("{}", device);
+            device_count += 1;
+            println!("{device_count}) {device}");
         }
+        println!();
         target_ip = devices[0].ip();
     }
 
     // Connect securely over the reliable TCP channel
-    println!("Attempting connection to server at {}:8080...", target_ip);
+    println!(
+        "[*] Attempting connection to server at {}:8080...",
+        target_ip
+    );
     let mut stream = TcpStream::connect(format!("{}:8080", target_ip))?;
-    println!("Connected to server successfully!");
+    println!("[*] Connected to server successfully!");
 
     send_file(stream.peer_addr(), &mut stream, file_path)?;
 
