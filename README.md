@@ -76,27 +76,29 @@ The sender will:
 Receiver:
 
 ```code
-Server listening on 8080
-Discovery service listening on 9999
-Sending response back directly to 172.20.10.11:59734
-Sent 14 bytes
-Connection established from 172.20.10.11:55274
-Receiving file: video.mkv (1112000827 bytes)
-Received file: video.mkv -> Saved to: "/home/user/Downloads/urbanSend/video.mkv"
-172.20.10.11:55274 disconnected
+[*] Server listening on 8080
+[*] Discovery service listening on 9999
+[*] Sending response back directly to 172.20.10.11:42880
+[*] Sent 14 bytes
+[*] Connection established from 172.20.10.11:58508
+[*] Receiving file: video.mkv (1112000827 bytes)
+[*] Received file: video.mkv -> Saved to: "/home/user/Downloads/urbanSend/video.mkv"
+[!] 172.20.10.11:58508 disconnected
 ```
 
 Sender:
 
 ```code
-Bound to 0.0.0.0:59734
-Waiting for responses...
-Received 14 bytes from 172.20.10.11:9999
-Found devices automatically:
-172.20.10.11:9999
-Attempting connection to server at 172.20.10.11:8080...
-Connected to server successfully!
-Sent "video.mkv" of 1112000827 bytes to 172.20.10.11:8080
+[*] Bound to 0.0.0.0:42880
+[*] Waiting for responses...
+[*] Received 14 bytes from 172.20.10.11:9999
+[*] Found devices automatically:
+1) 172.20.10.11:9999
+
+[*] Attempting connection to server at 172.20.10.11:8080...
+[*] Connected to server successfully!
+  [00:00:00] [||||||||||||||||||||||||||||||||||||||||] 1.04 GiB/1.04 GiB (0s)
+[*] Sent "video.mkv" of 1112000827 bytes to 172.20.10.11:8080
 ```
 
 ## Roadmap
