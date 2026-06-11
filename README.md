@@ -32,12 +32,21 @@ The project can:
 
 ## Usage
 
+#### How to setup [Rust](https://rust-lang.org/tools/install/)?
+
+### Initialize the Program
+```bash
+git clone https://www.github.com/nivedhz/urbanSend
+cd urbanSend/
+cargo install --path .
+```
+
 ### Start the Receiver
 
 Open a terminal and run:
 
 ```bash
-cargo run recieve
+urbanSend receive
 ```
 
 The receiver will start listening for incoming file transfers.
@@ -47,13 +56,13 @@ The receiver will start listening for incoming file transfers.
 Open another terminal and run:
 
 ```bash
-cargo run send /path/to/file
+urbanSend send /path/to/file
 ```
 
 Example:
 
 ```bash
-cargo run send /home/user/Videos/video.mkv
+urbanSend send /home/user/Videos/video.mkv
 ```
 
 The sender will:
@@ -69,40 +78,35 @@ Receiver:
 ```code
 Server listening on 8080
 Discovery service listening on 9999
-Sending response back directly to 198.51.100.50
+Sending response back directly to 172.20.10.11:59734
 Sent 14 bytes
-Connection established from 198.51.100.50
-Receiving file: video.mkv (1249771520 bytes)
+Connection established from 172.20.10.11:55274
+Receiving file: video.mkv (1112000827 bytes)
 Received file: video.mkv -> Saved to: "/home/user/Downloads/urbanSend/video.mkv"
-198.51.100.50disconnected
+172.20.10.11:55274 disconnected
 ```
 
 Sender:
 
 ```code
-Bound to 0.0.0.0:57354
+Bound to 0.0.0.0:59734
 Waiting for responses...
-Received 14 bytes from 198.51.100.50
-Found devices:
-198.51.100.50
-Connected to server at 198.51.100.50
-Sent "movie.mkv" of 1249771520 bytes to 198.51.100.50:8080
+Received 14 bytes from 172.20.10.11:9999
+Found devices automatically:
+172.20.10.11:9999
+Attempting connection to server at 172.20.10.11:8080...
+Connected to server successfully!
+Sent "video.mkv" of 1112000827 bytes to 172.20.10.11:8080
 ```
 
 ## Roadmap
 
 ### Networking
 
-- [ ] Automatic device discovery
 - [ ] Multiple device support
 - [ ] Transfer progress reporting
 - [ ] Transfer speed metrics
 - [ ] Resume interrupted transfers
-
-* [ ] Multiple device support
-* [ ] Transfer progress reporting
-* [ ] Transfer speed metrics
-* [ ] Resume interrupted transfers
 
 ### Reliability
 
