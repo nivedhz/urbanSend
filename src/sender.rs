@@ -23,7 +23,7 @@ fn send_file(
     stream.write_all(file_name.as_bytes())?;
     stream.write_all(&file_size.to_be_bytes())?;
 
-    let mut buffer = [0; 1048576];
+    let mut buffer = [0; 1 * 1024 * 1024];
     let progress_bar = ProgressBar::new(file_size);
     progress_bar.set_style(ProgressStyle::default_bar().template("{spinner:.green} [{elapsed_precise}] [{bar:40.yellow/orange}] {bytes}/{total_bytes} ({eta})").unwrap().progress_chars("|>-"));
 
@@ -39,9 +39,9 @@ fn send_file(
     }
 
     println!(
-        "[*] Sent {:?} of {} bytes to {:?}",
+        "[*] Sent {:?} of {}MB to {:?}",
         file_name,
-        file_size,
+        file_size / 1024 / 1024,
         addr.unwrap()
     );
 
@@ -85,7 +85,6 @@ pub fn send_data(file_path: String) -> Result<()> {
         target_ip = devices[0].ip();
     }
 
-    // Connect securely over the reliable TCP channel
     println!(
         "[*] Attempting connection to server at {}:8080...",
         target_ip

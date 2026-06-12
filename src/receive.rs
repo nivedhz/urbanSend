@@ -27,7 +27,7 @@ fn handle_connection(mut stream: TcpStream) -> Result<()> {
     loop {
         let mut packet_type = [0; 4];
         if stream.read_exact(&mut packet_type).is_err() {
-            println!("[!] {} disconnected", stream.peer_addr()?);
+            println!("[!] {} disconnected\n", stream.peer_addr()?);
             break;
         }
 
@@ -85,7 +85,7 @@ fn handle_connection(mut stream: TcpStream) -> Result<()> {
 pub fn receive_data() -> Result<()> {
     thread::spawn(|| {
         let socket = UdpSocket::bind("0.0.0.0:9999").unwrap();
-        println!("[*] Discovery service listening on 9999");
+        println!("[*] Discovery service listening on 9999\n");
 
         let mut buffer = [0; 1024];
 
