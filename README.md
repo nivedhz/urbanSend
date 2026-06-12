@@ -56,13 +56,15 @@ The receiver will start listening for incoming file transfers.
 Open another terminal and run:
 
 ```bash
-urbanSend send /path/to/file
+urbanSend send "/path/to/file"
 ```
+> Specifying the file paths in quotes would be mandatory for certain file names.!
+
 
 Example:
 
 ```bash
-urbanSend send /home/user/Videos/video.mkv
+urbanSend send "/home/user/Videos/video.mkv"
 ```
 
 The sender will:
