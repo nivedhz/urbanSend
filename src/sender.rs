@@ -23,7 +23,7 @@ fn send_file(
     stream.write_all(file_name.as_bytes())?;
     stream.write_all(&file_size.to_be_bytes())?;
 
-    let mut buffer = [0; 1048576];
+    let mut buffer = [0; 1 * 1024 * 1024];
     let progress_bar = ProgressBar::new(file_size);
     progress_bar.set_style(ProgressStyle::default_bar().template("{spinner:.green} [{elapsed_precise}] [{bar:40.yellow/orange}] {bytes}/{total_bytes} ({eta})").unwrap().progress_chars("|>-"));
 
