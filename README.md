@@ -1,4 +1,4 @@
-# urbanSend
+# urbanSend-cli
 
 A lightweight file transfer application written in Rust.
 
