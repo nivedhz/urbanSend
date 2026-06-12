@@ -39,9 +39,9 @@ fn send_file(
     }
 
     println!(
-        "[*] Sent {:?} of {} bytes to {:?}",
+        "[*] Sent {:?} of {}MB to {:?}",
         file_name,
-        file_size,
+        file_size / 1024 / 1024,
         addr.unwrap()
     );
 
@@ -85,7 +85,6 @@ pub fn send_data(file_path: String) -> Result<()> {
         target_ip = devices[0].ip();
     }
 
-    // Connect securely over the reliable TCP channel
     println!(
         "[*] Attempting connection to server at {}:8080...",
         target_ip
