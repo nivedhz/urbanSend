@@ -7,10 +7,10 @@ use std::path::PathBuf;
 use std::thread;
 
 fn get_save_dir() -> PathBuf {
-    if let Ok(prefix) = env::var("PREFIX") {
-        if prefix.contains("com.termux") {
-            return PathBuf::from("/data/data/com.termux/files/home/storage/downloads/urbanSend");
-        }
+    if let Ok(prefix) = env::var("PREFIX")
+        && prefix.contains("com.termux")
+    {
+        return PathBuf::from("/data/data/com.termux/files/home/storage/downloads/urbanSend");
     }
 
     if let Some(mut path) = dirs::download_dir() {

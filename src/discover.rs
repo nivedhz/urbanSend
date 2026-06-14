@@ -14,13 +14,13 @@ pub fn discover_devices() -> Result<Vec<SocketAddr>> {
     let mut sent = false;
     if let Ok(interfaces) = get_if_addrs() {
         for iface in interfaces {
-            if let get_if_addrs::IfAddr::V4(v4_addr) = iface.addr {
-                if let Some(broadcast_ip) = v4_addr.broadcast {
-                    let target = SocketAddr::new(std::net::IpAddr::V4(broadcast_ip), 9999);
-                    if socket.send_to(b"DISCOVER_URBANSEND", target).is_ok() {
-                        println!("  ↳ Sent to {} ({})", target, iface.name);
-                        sent = true;
-                    }
+            if let get_if_addrs::IfAddr::V4(v4_addr) = iface.addr
+                && let Some(broadcast_ip) = v4_addr.broadcast
+            {
+                let target = SocketAddr::new(std::net::IpAddr::V4(broadcast_ip), 9999);
+                if socket.send_to(b"DISCOVER_URBANSEND", target).is_ok() {
+                    println!("  ↳ Sent to {} ({})", target, iface.name);
+                    sent = true;
                 }
             }
         }
@@ -56,4 +56,3 @@ pub fn discover_devices() -> Result<Vec<SocketAddr>> {
 
     Ok(devices)
 }
-
