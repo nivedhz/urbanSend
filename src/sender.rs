@@ -10,7 +10,7 @@ use std::str::FromStr;
 fn send_file(
     addr: Result<SocketAddr, std::io::Error>,
     stream: &mut TcpStream,
-    file_path: String,
+    file_path: &str,
 ) -> Result<()> {
     let path = Path::new(file_path.trim());
     let mut file = File::open(path)?;
@@ -23,7 +23,8 @@ fn send_file(
     stream.write_all(file_name.as_bytes())?;
     stream.write_all(&file_size.to_be_bytes())?;
 
-    let mut buffer = [0; 1 * 1024 * 1024];
+    const MEGABYTES: usize = 1;
+    let mut buffer = [0; MEGABYTES * 1024 * 1024];
     let progress_bar = ProgressBar::new(file_size);
     progress_bar.set_style(ProgressStyle::default_bar().template("{spinner:.green} [{elapsed_precise}] [{bar:40.yellow/orange}] {bytes}/{total_bytes} ({eta})").unwrap().progress_chars("|>-"));
 
@@ -48,7 +49,7 @@ fn send_file(
     Ok(())
 }
 
-pub fn send_data(file_path: String) -> Result<()> {
+pub fn send_data(file_path: &str) -> Result<()> {
     let devices = discover::discover_devices()?;
     let target_ip: IpAddr;
 
