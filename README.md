@@ -36,7 +36,7 @@ The project can:
 
 ### Initialize the Program
 ```bash
-git clone https://www.github.com/nivedhz/urbanSend
+git clone https://www.github.com/nivedhz/urbanSend-cli
 cd urbanSend/
 cargo install --path .
 ```
